@@ -65,7 +65,7 @@ namespace ApplePayDecryptHelp
             using (StreamReader reader = new StreamReader(path))
             {
                 var fs = reader.BaseStream;
-                GetMerchantIdentifierField(fs);
+                GetMerchantIdentifierField(path, passWord);
 
                 fs.Position = 0;
                 GetPrivateKey(fs, passWord);
@@ -90,13 +90,13 @@ namespace ApplePayDecryptHelp
             }
         }
 
-        private void GetMerchantIdentifierField(Stream fs)
+        private void GetMerchantIdentifierField(string path, string passWord)
         {
-            byte[] rawTmp = new byte[fs.Length];
-            fs.Read(rawTmp, 0, (Int32)fs.Length);
+
+            byte[] rawTmp = File.ReadAllBytes(path);
 
             System.Security.Cryptography.X509Certificates.X509Certificate2 x509cert =
-            new X509Certificate2(rawTmp, "",
+            new X509Certificate2(path, passWord,
                 X509KeyStorageFlags.Exportable |
                 X509KeyStorageFlags.PersistKeySet);
             rawTmp = null;
@@ -140,7 +140,16 @@ namespace ApplePayDecryptHelp
             IBasicAgreement aKeyAgree = AgreementUtilities.GetBasicAgreement("ECDH");
             aKeyAgree.Init(this.merchantPrivateKey);
             BigInteger SharedSecret = aKeyAgree.CalculateAgreement(this.ephemeralPublicKey);
-            this.sharedSecret = SharedSecret.ToByteArray();
+            byte[] tmpSharedSecret = SharedSecret.ToByteArray();
+
+            if (tmpSharedSecret.Length > 32)
+            {
+                this.sharedSecret = new byte[tmpSharedSecret.Length - 1];
+                Array.Copy(tmpSharedSecret, 1, this.sharedSecret, 0, tmpSharedSecret.Length - 1);
+            }
+            else {
+                this.sharedSecret = tmpSharedSecret;
+            }
         }
 
         private void GetSymmetricKey()
