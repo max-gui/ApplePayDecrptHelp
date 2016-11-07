@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "exports": {
+    "ApplePayDecryptHelp/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.5",
+      "compile": {
+        "bin/Release/ApplePayDecryptHelp.dll": {}
+      },
+      "runtime": {
+        "../packages/BouncyCastle-Ext.1.7.0/lib/net20/BouncyCastle.CryptoExt.dll": {},
+        "bin/Release/ApplePayDecryptHelp.dll": {}
+      },
+      "contentFiles": {
+        "bin/Release/ApplePayDecryptHelp.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

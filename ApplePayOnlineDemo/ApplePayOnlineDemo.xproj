@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>276e67a9-9018-43c4-9cc3-7cf0c946ed7e</ProjectGuid>
+    <RootNamespace>ApplePayOnlineDemo</RootNamespace>
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/fa100f0e-bd83-4383-8b3a-e83d014ef42f/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/ApplePayOnlineDemo</ApplicationInsightsResourceId>
+  </PropertyGroup>
+  <ItemGroup>
+    <DnxInvisibleContent Include="bower.json" />
+    <DnxInvisibleContent Include=".bowerrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ApplePayDecryptHelp\ApplePayDecryptHelp.csproj" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\DotNet.Web\Microsoft.DotNet.Web.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>
