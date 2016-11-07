@@ -42,7 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplePayBase.cs" />
     <Compile Include="ApplePayInfo.cs" />
+    <Compile Include="ApplePayInfo4China.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
