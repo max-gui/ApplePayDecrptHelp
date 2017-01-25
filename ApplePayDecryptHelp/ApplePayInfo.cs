@@ -26,6 +26,11 @@ namespace ApplePayDecryptHelp
 
         public string base64PubKey { get; set; }
 
+        public ApplePayInfo4ECC(CertKind fileOrString):base(fileOrString)
+        {
+
+        }
+
         protected override void GetOthersFromP12(Stream fs, string passWord)
         {
             GetMerchantIdentifierField(fs, certPassWord);

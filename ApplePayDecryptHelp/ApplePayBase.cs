@@ -11,6 +11,12 @@ using System.Threading.Tasks;
 
 namespace ApplePayDecryptHelp
 {
+    public enum CertKind
+    {
+        file,
+        string64
+    }
+
     public abstract class ApplePayBase
     {
 
@@ -19,13 +25,16 @@ namespace ApplePayDecryptHelp
         //public string wrappedKey { get; set; }
         public KeyParameter kp { get; set; }
         public string certPath { get; set; }
+        public string base64Cert { get; set; }
         public string certPassWord { get; set; }
 
         public byte[] Iv { get; set; }
-
-        protected ApplePayBase()
+        private Action GetAction { get; set; }
+        protected ApplePayBase(CertKind fileOrString)
         {
             Iv = new byte[16];
+            GetAction = fileOrString.Equals(CertKind.file) ?
+                (Action)GetBasicKeyByFile : GetBasicKeyByString;
         }
 
         public ApplePayBase Init()
@@ -39,14 +48,39 @@ namespace ApplePayDecryptHelp
         public void GetBasicKey()
         {
             PriorToGetStreamFromP12();
+
+            GetAction();
+
+            SuccessorForGetStreamFromP12();
+            
+        }
+
+        private void ReadHelp(StreamReader reader)
+        {
+            var fs = reader.BaseStream;
+            fs.Position = 0;
+            GetOthersFromP12(fs, certPassWord);
+            fs.Position = 0;
+            var keys = GetPrivateKeyFromP12(fs, certPassWord);
+            SetKey(keys.FirstOrDefault());
+        }
+
+        public void GetBasicKeyByFile()
+        {
             using (StreamReader reader = new StreamReader(certPath))
             {
-                var fs = reader.BaseStream;
-                fs.Position = 0;
-                GetOthersFromP12(fs, certPassWord);
-                fs.Position = 0;
-                var keys = GetPrivateKeyFromP12(fs, certPassWord);
-                SetKey(keys.FirstOrDefault());
+                ReadHelp(reader);
+            }
+            SuccessorForGetStreamFromP12();
+        }
+
+        public void GetBasicKeyByString()
+        {
+            var stream64 = Convert.FromBase64String(base64Cert);
+            using (var stream = new MemoryStream(stream64))
+            using (StreamReader reader = new StreamReader(stream))// certPath))
+            {
+                ReadHelp(reader);
             }
             SuccessorForGetStreamFromP12();
         }

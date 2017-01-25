@@ -14,7 +14,11 @@ namespace ApplePayDecryptHelp
     {
         RsaKeyParameters erchantPrivateKey { get; set; }
         public string wrappedKey { get; set; }
-        
+
+        public ApplePayInfo4ChinaRsa(CertKind fileOrString):base(fileOrString)
+        {
+
+        }
 
         protected override void SetKey(AsymmetricKeyParameter key)
         {
